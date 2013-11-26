@@ -1,0 +1,68 @@
+﻿@model Nwd.BackOffice.Model.Album
+
+@{
+    ViewBag.Title = "Modifier un album";
+    ViewBag.Legend = "Modifier un album";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@using (Html.BeginForm(null, null, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new
+{ 
+    enctype = "multipart/form-data"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <h2>@ViewBag.success</h2>
+
+    <fieldset>
+        <legend>@ViewBag.Legend</legend>
+        <h3>Informations sur l'album</h3>
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Title)
+                    @Html.TextBoxFor(m => m.Title, new { @Value = @ViewBag.albumTitle })
+                    @Html.ValidationMessageFor(m => m.Title)
+                    <br />
+
+                    @Html.LabelFor(m => m.Type)
+                    @Html.TextBoxFor(m => m.Type, new { @Value = @ViewBag.type })
+                    @Html.ValidationMessageFor(m => m.Type)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>Artiste Principal</h3>
+                    @Html.LabelFor(m => m.Artist.Name)
+                    @Html.TextBoxFor(m => m.Artist.Name, new { @Value = @ViewBag.artistName })
+                    @Html.ValidationMessageFor(m => m.Artist.Name)
+                    <br />
+
+                    @Html.LabelFor(m => m.Artist.Biography)
+                    @Html.TextBoxFor(m => m.Artist.Biography, new { @Value = @ViewBag.artistBiography })
+                    @Html.ValidationMessageFor(m => m.Artist.Biography)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <input type="submit" value="Modifier" onclick="setAlbumIdToUrl()"/>
+}
+
+<script>
+    function setAlbumIdToUrl() {
+        window.location.href = window.location.href + "?albumId=@ViewBag.albumId";
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+}
+

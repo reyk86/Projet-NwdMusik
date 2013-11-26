@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Liste des albums";
+    ViewBag.Legend = "Liste des albums";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
+<h2>@ViewBag.success</h2>
+
+<fieldset>
+    <legend>@ViewBag.Legend</legend>
+    <table>
+        @{
+            Nwd.FrontOffice.Impl.MusicReader musicReader = new Nwd.FrontOffice.Impl.MusicReader();
+
+            foreach (Nwd.FrontOffice.ViewModels.AlbumThumbnailViewModel albumTh in Model.Albums)
+            {
+                Nwd.FrontOffice.AlbumViewModel album = musicReader.GetAlbum(albumTh.AlbumId);
+            
+            <tr>
+                <td>
+                    <h3>Nom de l'album : @albumTh.AlbumName
+                        @if (@User.Identity.Name == "SuperAdmin")
+                        {
+                            <a href="/Admin/Album/Edit?albumId=@albumTh.AlbumId">Modifier</a>
+                        }
+                        <br />
+                        Artiste principal : @albumTh.ArtistName
+                    </h3>
+                    <img src="@albumTh.CoverImageUrl" width="300" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @foreach (Nwd.FrontOffice.ViewModels.TrackViewModel track in album.Tracks)
+                    {
+                        <h3>Titre : @track.SongName</h3>
+                        <audio controls>
+                            <source src="@track.SongUrl" type="audio/mp3" />
+                        </audio>
+                    }
+                </td>
+            </tr>
+            }
+        }
+    </table>
+</fieldset>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+}
+

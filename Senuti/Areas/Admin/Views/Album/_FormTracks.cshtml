@@ -1,0 +1,14 @@
+﻿@model Nwd.BackOffice.Model.Track
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = string.Format("Tracks[{0}]", ViewBag.id);
+    string id = "track" + @ViewBag.id;
+}
+<td id='@id'>
+    @Html.LabelFor(m => m.Song.Name)
+    @Html.TextBoxFor(m => m.Song.Name)
+    @Html.ValidationMessageFor(m => m.Song.Name)
+    <br />
+    @Html.LabelFor(m => m.File)
+    @Html.TextBoxFor(m => m.File, new { type = "file" })
+    @Html.ValidationMessageFor(m => m.File)
+</td>

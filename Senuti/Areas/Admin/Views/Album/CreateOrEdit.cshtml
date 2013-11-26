@@ -1,0 +1,89 @@
+﻿@model Nwd.BackOffice.Model.Album
+
+@{
+    ViewBag.Title = "Créer un album";
+    ViewBag.Legend = "Créer un album";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@using (Html.BeginForm(null, null, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new
+{
+    enctype = "multipart/form-data"
+}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <h2>@ViewBag.success</h2>
+
+    <fieldset>
+        <legend>@ViewBag.Legend</legend>
+        <h3>Informations sur l'album</h3>
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Title)
+                    @Html.TextBoxFor(m => m.Title)
+                    @Html.ValidationMessageFor(m => m.Title)
+                    <br />
+
+                    @Html.LabelFor(m => m.Type)
+                    @Html.TextBoxFor(m => m.Type)
+                    @Html.ValidationMessageFor(m => m.Type)
+                    <br />
+
+                    @Html.LabelFor(m => m.CoverFile)
+                    <input type="file" name="CoverFile" />
+                    @Html.ValidationMessageFor(m => m.CoverFile)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>Artiste Principal</h3>
+                    @Html.LabelFor(m => m.Artist.Name)
+                    @Html.TextBoxFor(m => m.Artist.Name)
+                    @Html.ValidationMessageFor(m => m.Artist.Name)
+                    <br />
+                    @Html.LabelFor(m => m.Artist.Biography)
+                    @Html.TextBoxFor(m => m.Artist.Biography)
+                    @Html.ValidationMessageFor(m => m.Artist.Biography)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>Pistes de musique</h3>
+                    @Ajax.ActionLink("Ajouter", "AddTrack", new AjaxOptions { OnBegin = "Increment", HttpMethod = "Post", UpdateTargetId = "Tracks", InsertionMode = InsertionMode.InsertAfter })
+                    <table>
+                        <tr id="Tracks">
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <input type="submit" value="Créer" />
+}
+
+<script>
+    SongId = 1;
+    function Increment() {
+        $("a").attr('href', function (i, h) {
+            return h + "?id=" + SongId;
+        });
+        SongId++;
+    }
+
+    function RemoveTrack(id) {
+        $("td#" + id).remove();
+    }
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Styles.Render("~/Content/themes/base/css")
+}
+
